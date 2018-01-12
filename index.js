@@ -84,9 +84,8 @@ function initMap() {
     drawingManager.addListener('circlecomplete', function(e){
         //calculate area
         circleArea(area);
-        area.addListener('radius_changed', function(area){
-            console.log('radius changed');
-            return circleArea;
+        area.addListener('radius_changed',function(){
+            circleArea(area);
         });
     })
     
