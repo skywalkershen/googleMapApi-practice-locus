@@ -51,7 +51,7 @@ function initMap() {
         mapArea = google.maps.geometry.spherical.computeArea(path);
         mapArea = mapArea.toPrecision(10);
         console.log('Area :' + mapArea);
-        document.getElementById('area').innerHTML= mapArea + 'm^2';
+        document.getElementById('area').innerHTML= mapArea + ' m^2';
     }
     
     drawingManager.addListener('polygoncomplete', function(e){
@@ -78,7 +78,7 @@ function initMap() {
         mapArea = radius * radius * Math.PI;
         mapArea = mapArea.toPrecision(10);
         console.log('Area :' + mapArea);
-        document.getElementById('area').innerHTML= mapArea + 'm^2';
+        document.getElementById('area').innerHTML= mapArea + ' m^2';
     }
     
     drawingManager.addListener('circlecomplete', function(e){
