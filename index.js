@@ -72,14 +72,22 @@ function initMap() {
         
         
     })
-    
-    drawingManager.addListener('circlecomplete', function(e){
-        //calculate area
+
+    function circleArea(area){
         var radius = area.getRadius();
         mapArea = radius * radius * Math.PI;
         mapArea = mapArea.toPrecision(10);
         console.log('Area :' + mapArea);
         document.getElementById('area').innerHTML= mapArea + 'm^2';
+    }
+    
+    drawingManager.addListener('circlecomplete', function(e){
+        //calculate area
+        circleArea(area);
+        area.addListener('radius_changed', function(area){
+            console.log('radius changed');
+            return circleArea;
+        });
     })
     
  
