@@ -38,6 +38,7 @@ function initMap() {
         if(overlaytype === 'circle' || overlaytype === 'polygon'){
             area = event.overlay;
             area.setEditable(true);
+            area.setDraggable(true);
         }
         if(overlaytype !== 'marker'){
             drawingManager.setDrawingMode(null);
@@ -46,14 +47,30 @@ function initMap() {
 
     });
 
-  
-    
-    drawingManager.addListener('polygoncomplete', function(e){
-        //calculate area
-        mapArea = google.maps.geometry.spherical.computeArea(area.getPath());
+    function polyArea(path){
+        mapArea = google.maps.geometry.spherical.computeArea(path);
         mapArea = mapArea.toPrecision(10);
         console.log('Area :' + mapArea);
         document.getElementById('area').innerHTML= mapArea + 'm^2';
+    }
+    
+    drawingManager.addListener('polygoncomplete', function(e){
+        //calculate area
+        var path = area.getPath();
+        //addeventlistener for every node on the path
+        path.forEach(function(){
+            path.addListener('insert_at', function(e){
+                console.log('inserted at '+e.latLng);
+                polyArea(path);
+            })
+            path.addListener('set_at', function(e){
+                console.log('moved to '+e.latLng);
+                polyArea(path);
+            })
+        })
+        polyArea(path);
+        
+        
     })
     
     drawingManager.addListener('circlecomplete', function(e){
