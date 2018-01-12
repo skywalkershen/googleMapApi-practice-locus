@@ -1,5 +1,6 @@
 var map;
 var area;
+var mapArea;
 var marker=[];
 
 
@@ -14,7 +15,7 @@ function initMap() {
         drawingMode: google.maps.drawing.OverlayType.null,
         drawingControl: true,
         drawingControlOptions: {
-          position: google.maps.ControlPosition.TOP_CENTER,
+          position: google.maps.ControlPosition.TOP_LEFT,
           drawingModes: ['marker', 'circle', 'polygon']//, 'polyline', 'rectangle']
         },
       });
@@ -33,16 +34,36 @@ function initMap() {
             area.setMap(null);
         }
         
-        if(overlaytype !== 'marker'){
-            drawingManager.setDrawingMode(null);
-        }
+        
         if(overlaytype === 'circle' || overlaytype === 'polygon'){
             area = event.overlay;
             area.setEditable(true);
         }
+        if(overlaytype !== 'marker'){
+            drawingManager.setDrawingMode(null);
+            
+        }
 
     });
 
+  
+    
+    drawingManager.addListener('polygoncomplete', function(e){
+        //calculate area
+        mapArea = google.maps.geometry.spherical.computeArea(area.getPath());
+        mapArea = mapArea.toPrecision(10);
+        console.log('Area :' + mapArea);
+        document.getElementById('area').innerHTML= mapArea + 'm^2';
+    })
+    
+    drawingManager.addListener('circlecomplete', function(e){
+        //calculate area
+        var radius = area.getRadius();
+        mapArea = radius * radius * Math.PI;
+        mapArea = mapArea.toPrecision(10);
+        console.log('Area :' + mapArea);
+        document.getElementById('area').innerHTML= mapArea + 'm^2';
+    })
     
  
 }
